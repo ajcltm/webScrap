@@ -1,23 +1,38 @@
 import sys
-parentPath='c:/Users/ajcltm/PycharmProjects/webScrap' # parent 경로
-sys.path.append(parentPath) # 경로 추가
+from pathlib import Path
+sys.path.append(str(Path.cwd().joinpath('webScrap')))
+import fileSaver
+import os
+from tqdm import tqdm
 
-from dataRequests import IRequester
-from fileSaver import FileSaver
 
-class JsonDataScraper:
+class SScraper:
 
-    def __init__(self, requester:IRequester, fileSaver:FileSaver):
-        self.requester = requester
-        self.fileSaver = fileSaver
+    def __init__(self, FReqeuster, working_list, main_path):
+        self.fr = FReqeuster
+        self.wl = working_list
+        self.mp = main_path
 
     def execute(self):
-        r = self.requester.execute()
-        try:
-             data = r.json()
-        except :
-            data = None
-            print(r.status_code)
+        start_point = self.get_start_point()
+        if start_point == None:
+            exit()
+        list_to_work = self.wl[start_point:]
+        for i in tqdm(list_to_work):
+            r = self.fr(i).get_requester()
+            try:
+                data = r.json()
+            except :
+                data = None
+                print(f'fail to get data : {r.status_code}')
+            if data:
+                fileSaver.FFileSaver(i, self.mp).get_fileSaver().execute(data)
 
-        if data:
-            self.fileSaver.execute(data)
+    def get_start_point(self):
+        worked_lst = os.listdir(self.mp)
+        if not worked_lst: 
+            return 0
+        for i in self.wl:
+            if not f'{i}.pickle' in worked_lst:
+                return self.wl.index(i)
+        return None
