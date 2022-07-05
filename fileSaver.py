@@ -2,9 +2,9 @@ from typing import Protocol
 from pathlib import Path
 import pickle
 
-class FileSaver(Protocol):
+class IFileSaver(Protocol):
 
-    def execute(self, data:any):
+    def save_file(self, data:any, file_name:str):
         ...
 
 
@@ -13,16 +13,7 @@ class PickleSaver:
     def __init__(self, filePath:Path):
         self.filePath = filePath
 
-    def execute(self, data:any) -> None:
-        with open(self.filePath, 'wb') as fw:
+    def save_file(self, data:any, file_name:str) -> None:
+        save_path = self.filePath.joinpath(f'{file_name}.pickle')
+        with open(self.save_path, 'wb') as fw:
             pickle.dump(data, fw, protocol=pickle.HIGHEST_PROTOCOL)
-
-
-class FFileSaver:
-
-    def __init__(self, code, mainPath):
-        self.code = code
-        self.filePath = mainPath.joinpath(f'{self.code}.pickle')
-
-    def get_fileSaver(self):
-        return PickleSaver(self.filePath)
