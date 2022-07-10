@@ -1,5 +1,5 @@
 from typing import Protocol, Dict
-from dataclasses import dataclass
+import pydantic
 
 class IWork(Protocol):
 
@@ -9,9 +9,8 @@ class IWork(Protocol):
     def get_file_name(self):
         ...
 
-@dataclass
-class Work:
-    work : dict
+class Work(pydantic.BaseModel):
+    work : Dict
 
     def get_request_key(self)->Dict:
         return self.work

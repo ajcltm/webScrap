@@ -4,7 +4,7 @@ path = str(Path.cwd().joinpath('webScrap'))
 print(path)
 sys.path.append(path)
 import workingListFilter
-import work
+import core.work as work
 
 import unittest
 
@@ -12,7 +12,7 @@ class TestWorkedList(unittest.TestCase):
 
     def setUp(self) -> None:
         dataList = [{'complexNo':'apartment1', 'ptp':'a_type'}, {'complexNo':'apartment2', 'ptp':'b_type'}]
-        self.workingList = [work.Work(i) for i in dataList]
+        self.workingList = [work.Work(work=i) for i in dataList]
 
     def test_none_worked_list(self) -> None:
         workedList = None        

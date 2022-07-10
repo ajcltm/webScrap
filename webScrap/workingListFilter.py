@@ -1,7 +1,7 @@
 from typing import Protocol, List
 import os
 from pathlib import Path
-from work import IWork
+from core.work import IWork
 
 class IWorkingListFilter(Protocol):
 

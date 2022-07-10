@@ -15,5 +15,5 @@ class PickleSaver:
 
     def save_file(self, data:any, file_name:str) -> None:
         save_path = self.filePath.joinpath(f'{file_name}.pickle')
-        with open(self.save_path, 'wb') as fw:
+        with open(save_path, 'wb') as fw:
             pickle.dump(data, fw, protocol=pickle.HIGHEST_PROTOCOL)
