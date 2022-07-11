@@ -1,12 +1,6 @@
-import sys
-from pathlib import Path
-path = str(Path.cwd().joinpath('webScrap'))
-print(path)
-sys.path.append(path)
-import workingListFilter
-import core.work as work
-
 import unittest
+from pathlib import Path
+from webScrap import workingListFilter, work
 
 class TestWorkedList(unittest.TestCase):
 
@@ -17,7 +11,7 @@ class TestWorkedList(unittest.TestCase):
     def test_none_worked_list(self) -> None:
         workedList = None        
         workedPath = Path.cwd().joinpath('webScrap', 'test')
-        wlf = workingListFilter.WorkingListFilter(workedFilePath=workedPath)
+        wlf = workingListFilter.WorkingListFilter()
         return_value = wlf.filt_working_list(workedList=workedList, workingList=self.workingList)
         self.assertEqual(return_value, self.workingList)
 
@@ -26,10 +20,9 @@ class TestWorkedList(unittest.TestCase):
         workedList = [f'{i}.pickle' for i in workedList_][:1]
         print(workedList)
         workedPath = Path.cwd().joinpath('webScrap', 'test')
-        wlf = workingListFilter.WorkingListFilter(workedFilePath=workedPath)
+        wlf = workingListFilter.WorkingListFilter()
         return_value = wlf.filt_working_list(workedList=workedList, workingList=self.workingList)
         self.assertEqual(return_value, self.workingList[-1:])
-
 
 
 if __name__ == '__main__':

@@ -1,23 +1,23 @@
-import sys
-from pathlib import Path
-sys.path.append(str(Path.cwd().joinpath('webScrap')))
-from workingList import IWorkingList
-from workingListFilter import IWorkingListFilter
-from requester import IRequester
-from fileSaver import IFileSaver
+from webScrap.workingList import IWorkingList
+from webScrap.workedList import IWorkedList
+from webScrap.workingListFilter import IWorkingListFilter
+from webScrap.requester import IRequester
+from webScrap.fileSaver import IFileSaver
 from tqdm import tqdm
 
 class SScraper:
 
-    def __init__(self, workingList:IWorkingList, workingListFilter:IWorkingListFilter, requester:IRequester, fileSaver:IFileSaver) -> None:
-        self.wl = workingList
-        self.wlf = workingListFilter
-        self.r = requester
-        self.fs = fileSaver
+    def __init__(self, IWorkingList:IWorkingList, IWorkedList:IWorkedList, IWorkingListFilter:IWorkingListFilter, IRequester:IRequester, IFileSaver:IFileSaver) -> None:
+        self.wkngl = IWorkingList
+        self.wkedl = IWorkedList
+        self.wlf = IWorkingListFilter
+        self.r = IRequester
+        self.fs = IFileSaver
 
     def execute(self):
-        working_list = self.wl.get_working_list()
-        notYetWorkedList = self.wlf.filt_working_list(working_list)
+        working_list = self.wkngl.get_working_list()
+        worked_list = self.wkedl.get_worked_list()
+        notYetWorkedList = self.wlf.filt_working_list(workedList=worked_list, workingList=working_list)
 
         for iwork in tqdm(notYetWorkedList):
             r = self.r.get_request_r(iwork.get_request_key())

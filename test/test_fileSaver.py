@@ -1,12 +1,8 @@
-import sys
-from pathlib import Path
-# sys.path.append(str(Path.cwd()))
 import unittest
-from core import fileSaver
-from core import work
+from pathlib import Path
+from webScrap import work, fileSaver
 import pickle
 import os
-import requester
 
 class TestFileSaver(unittest.TestCase):
 
