@@ -10,5 +10,8 @@ class IWorkedList(Protocol):
 
 class WorkedList:
 
-    def get_worked_list(self, workedFilePath:Path):
-        return os.listdir(workedFilePath)
+    def __init__(self, workedFilePath:Path):
+        self.workedFilePath = workedFilePath
+
+    def get_worked_list(self):
+        return os.listdir(self.workedFilePath)

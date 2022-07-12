@@ -18,7 +18,7 @@ class SScraper:
         working_list = self.wkngl.get_working_list()
         worked_list = self.wkedl.get_worked_list()
         notYetWorkedList = self.wlf.filt_working_list(workedList=worked_list, workingList=working_list)
-
+    
         for iwork in tqdm(notYetWorkedList):
             r = self.r.get_request_r(iwork.get_request_key())
             try:
