@@ -1,9 +1,11 @@
 from webScrap.workingList import IWorkingList
-from webScrap.workedList import IWorkedList
-from webScrap.workingListFilter import IWorkingListFilter
+from webScrap.workedList import IWorkedList, WorkedList
+from webScrap.workingListFilter import IWorkingListFilter, WorkingListFilter
 from webScrap.requester import IRequester
-from webScrap.fileSaver import IFileSaver
+from webScrap.fileSaver import IFileSaver, PickleSaver
 from tqdm import tqdm
+from pathlib import Path
+
 
 class SScraper:
 
@@ -20,14 +22,28 @@ class SScraper:
         notYetWorkedList = self.wlf.filt_working_list(workedList=worked_list, workingList=working_list)
     
         for iwork in tqdm(notYetWorkedList):
-            r = self.r.get_request_r(iwork.get_request_key())
             try:
-                data = r.json()
+                data = self.r.request(iwork.get_request_key())
             except :
                 data = None
-                print(f'fail to get data : {r.status_code}')
+                print(f'fail to get data : {iwork}')
             if data:
                 self.fs.save_file(data, iwork.get_file_name())
 
+class FSScraper:
 
+    def __init__(self, IWorkingList:IWorkingList, IRequester:IRequester, save_path:Path) -> None:
+        self.wkngl = IWorkingList
+        self.wkedl = WorkedList(save_path)
+        self.wlf = WorkingListFilter()
+        self.r = IRequester
+        self.fs = PickleSaver(save_path)
+
+    def get_sscraper(self):
+        return SScraper(IWorkingList=self.wkngl, IWorkedList=self.wkedl, IWorkingListFilter=self.wlf, IRequester=self.r, IFileSaver=self.fs)
+        
+    def execute(self):
+        sscraper = self.get_sscraper()
+        sscraper.execute()
+        
         
